@@ -28,8 +28,9 @@ public final class SettingsValues extends SignalStoreValues {
 
   private static final String TAG = Log.tag(SettingsValues.class);
 
-  public static final String LINK_PREVIEWS          = "settings.link_previews";
-  public static final String KEEP_MESSAGES_DURATION = "settings.keep_messages_duration";
+  public static final String LINK_PREVIEWS                = "settings.link_previews";
+  public static final String KEEP_MESSAGES_DURATION       = "settings.keep_messages_duration";
+  public static final String SHOW_PROFILE_NAME_CHANGES    = "settings.show_profile_name_changes";
 
   public static final String PREFER_SYSTEM_CONTACT_PHOTOS = "settings.prefer.system.contact.photos";
 
@@ -119,7 +120,8 @@ public final class SettingsValues extends SignalStoreValues {
 
   @Override
   @NonNull List<String> getKeysToIncludeInBackup() {
-    return Arrays.asList(LINK_PREVIEWS,
+    return Arrays.asList(SHOW_PROFILE_NAME_CHANGES,
+                         LINK_PREVIEWS,
                          KEEP_MESSAGES_DURATION,
                          PREFER_SYSTEM_CONTACT_PHOTOS,
                          CALL_DATA_MODE,
@@ -165,6 +167,14 @@ public final class SettingsValues extends SignalStoreValues {
 
   public void setLinkPreviewsEnabled(boolean enabled) {
     putBoolean(LINK_PREVIEWS, enabled);
+  }
+
+  public boolean isShowProfileNameChangesEnabled() {
+    return getBoolean(SHOW_PROFILE_NAME_CHANGES, true);
+  }
+
+  public void setShowProfileNameChangesEnabled(boolean enabled) {
+    putBoolean(SHOW_PROFILE_NAME_CHANGES, enabled);
   }
 
   public @NonNull KeepMessagesDuration getKeepMessagesDuration() {

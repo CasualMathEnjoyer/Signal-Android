@@ -22,6 +22,7 @@ import org.thoughtcrime.securesms.database.model.InMemoryMessageRecord.Universal
 import org.thoughtcrime.securesms.database.model.MessageRecord
 import org.thoughtcrime.securesms.database.model.MmsMessageRecord
 import org.thoughtcrime.securesms.dependencies.AppDependencies
+import org.thoughtcrime.securesms.keyvalue.SignalStore
 import org.thoughtcrime.securesms.messagerequests.MessageRequestRepository
 import org.thoughtcrime.securesms.recipients.Recipient
 import org.thoughtcrime.securesms.util.adapter.mapping.MappingModel
@@ -116,6 +117,10 @@ class ConversationDataSource(
       records.add(UniversalExpireTimerUpdate(threadId))
     }
 
+    if (!SignalStore.settings.isShowProfileNameChangesEnabled) {
+      records.removeAll { it.isProfileChange }
+    }
+
     stopwatch.split("messages")
 
     val extraData = MessageDataFetcher.fetch(records, threadRecipient)
@@ -177,6 +182,10 @@ class ConversationDataSource(
 
     val scheduleDate = (record as? MmsMessageRecord)?.scheduledDate
     if (scheduleDate != null && scheduleDate != -1L) {
+      return null
+    }
+
+    if (record?.isProfileChange == true && !SignalStore.settings.isShowProfileNameChangesEnabled) {
       return null
     }
 

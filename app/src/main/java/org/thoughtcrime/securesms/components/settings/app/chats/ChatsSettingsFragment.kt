@@ -65,6 +65,10 @@ class ChatsSettingsFragment : ComposeFragment() {
       viewModel.setGenerateLinkPreviewsEnabled(enabled)
     }
 
+    override fun onShowProfileNameChangesChanged(enabled: Boolean) {
+      viewModel.setShowProfileNameChangesEnabled(enabled)
+    }
+
     override fun onUseAddressBookChanged(enabled: Boolean) {
       viewModel.setUseAddressBook(enabled)
     }
@@ -122,6 +126,7 @@ class ChatsSettingsFragment : ComposeFragment() {
 private interface ChatsSettingsCallbacks : ChatExportCallbacks {
   fun onNavigationClick() = Unit
   fun onGenerateLinkPreviewsChanged(enabled: Boolean) = Unit
+  fun onShowProfileNameChangesChanged(enabled: Boolean) = Unit
   fun onUseAddressBookChanged(enabled: Boolean) = Unit
   fun onKeepMutedChatsArchivedChanged(enabled: Boolean) = Unit
   fun onAddAChatFolderClick() = Unit
@@ -171,6 +176,16 @@ private fun ChatsSettingsScreen(
           enabled = state.isRegisteredAndUpToDate(),
           checked = state.generateLinkPreviews,
           onCheckChanged = callbacks::onGenerateLinkPreviewsChanged
+        )
+      }
+
+      item {
+        Rows.ToggleRow(
+          text = stringResource(R.string.preferences__show_profile_name_changes),
+          label = stringResource(R.string.preferences__show_a_message_when_contacts_change_profile_name),
+          enabled = state.isRegisteredAndUpToDate(),
+          checked = state.showProfileNameChanges,
+          onCheckChanged = callbacks::onShowProfileNameChangesChanged
         )
       }
 
@@ -294,6 +309,7 @@ private fun ChatsSettingsScreenPreview() {
     ChatsSettingsScreen(
       state = ChatsSettingsState(
         generateLinkPreviews = true,
+        showProfileNameChanges = true,
         useAddressBook = true,
         keepMutedChatsArchived = true,
         useSystemEmoji = false,
